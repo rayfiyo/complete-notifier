@@ -2,13 +2,16 @@ package config
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/joho/godotenv"
 )
 
-type Config struct {
-	WebhookURL string
+func NewWebhookURL(w string) *Config {
+	return &Config{
+		WebhookURL: w,
+	}
 }
 
 func Load() (*Config, error) {
@@ -22,7 +25,5 @@ func Load() (*Config, error) {
 		return nil, fmt.Errorf("DISCORD_WEBHOOK_URL is not set in .env file")
 	}
 
-	return &Config{
-		WebhookURL: webhookURL,
-	}, nil
+	return NewWebhookURL(webhookURL), nil
 }
