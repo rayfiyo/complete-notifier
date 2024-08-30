@@ -16,7 +16,8 @@ func Send(webhookURL string, msg string) error {
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
+	if http.StatusOK > resp.StatusCode || resp.StatusCode > http.StatusIMUsed {
+		// 200 未満 か 226 超過
 		return fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 	}
 

@@ -9,18 +9,22 @@ import (
 )
 
 func main() {
+	url := flag.String("url", "", "DISCORD_WEBHOOK_URL(API). Can also be written in .env (see README.md for details).")
 	flag.Parse()
 	message := flag.Arg(0)
 
-	cfg, err := config.Load()
-	if err != nil {
-		log.Fatalf("Failed to load configuration: %v", err)
+	var cfg *config.Config
+	if *url != "" {
+		cfg = config.NewWebhookURL(*url)
+	} else {
+		var err error
+		cfg, err = config.Load()
+		if err != nil {
+			log.Fatalf("Failed to load configuration: %v", err)
+		}
 	}
 
-	err = webhook.Send(cfg.WebhookURL, message)
-	if err != nil {
+	if err := webhook.Send(cfg.WebhookURL, message); err != nil {
 		log.Fatalf("Failed to send webhook: %v", err)
 	}
-
-	log.Println("Webhook sent successfully")
 }
