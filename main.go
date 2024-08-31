@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"log"
+	"time"
 
 	"github.com/rayfiyo/complete-notifier/config"
 	"github.com/rayfiyo/complete-notifier/webhook"
@@ -24,7 +25,9 @@ func main() {
 		}
 	}
 
-	if err := webhook.Send(cfg.WebhookURL, message); err != nil {
+	t := time.Now().Format(" 2006-01-02 15:04:05 (Z07:00) ")
+
+	if err := webhook.Send(cfg.WebhookURL, message+t); err != nil {
 		log.Fatalf("Failed to send webhook: %v", err)
 	}
 }
